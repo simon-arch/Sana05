@@ -1,4 +1,6 @@
-﻿namespace Structures;
+﻿using System;
+
+namespace Structures;
 public class MyDate
 {
     protected int Year;
@@ -8,23 +10,28 @@ public class MyDate
     protected int Minutes;
     public void SetYear(int year)
     {
-        Year = year;
+        if (year > 0) 
+            Year = year;
     }
     public void SetMonth(int month)
     {
-        Month = month;
+        if (month > 0 && month <= 12)
+            Month = month;
     }
     public void SetDay(int day)
     {
-        Day = day;
+        if (day > 0 && day <= 366)
+            Day = day;
     }
     public void SetHours(int hours)
     {
-        Hours = hours;
+        if (hours >= 0 && hours <= 23)
+            Hours = hours;
     }
     public void SetMinutes(int minutes)
     {
-        Minutes = minutes;
+        if (minutes >= 0 && minutes < 60)
+            Minutes = minutes;
     }
     public int GetYear()
     {
@@ -54,12 +61,37 @@ public class Airplane
     protected string FinishCity;
     protected MyDate StartDate;
     protected MyDate FinishDate;
-    public Airplane(string startCity, string finishCity, MyDate startDate, MyDate finishDate)
+    public void SetStartCity(string startCity)
     {
         StartCity = startCity;
+    }
+    public void SetFinishCity(string finishCity)
+    {
         FinishCity = finishCity;
+    }
+    public void SetStartDate (MyDate startDate)
+    {
         StartDate = startDate;
+    }
+    public void SetFinishDate (MyDate finishDate)
+    {
         FinishDate = finishDate;
+    }
+    public string GetStartCity()
+    {
+        return StartCity;
+    }
+    public string GetFinishCity()
+    {
+        return FinishCity;
+    }
+    public MyDate GetStartDate()
+    {
+        return StartDate;
+    }
+    public MyDate GetFinishDate()
+    {
+        return FinishDate;
     }
     public int GetTotalTime()
     {
@@ -71,6 +103,97 @@ public class Airplane
     public bool IsArrivingToday()
     {
         return (StartDate.GetYear() == FinishDate.GetYear() && StartDate.GetMonth() == FinishDate.GetMonth() && StartDate.GetDay() == FinishDate.GetDay());
+    }
+}
+
+public class Product
+{
+    protected string Name;
+    protected double Price;
+    protected Currency Cost;
+    protected int Quantity;
+    protected string Producer;
+    protected double Weight;
+    public void SetName(string name)
+    {
+        Name = name;
+    }
+    public void SetPrice(double price)
+    {
+        Price = price;
+    }
+    public void SetCost(Currency cost)
+    {
+        Cost = cost;
+    }
+    public void SetQuantity(int quantity)
+    {
+        Quantity = quantity;
+    }
+    public void SetProducer(string producer) 
+    { 
+        Producer = producer;
+    }
+    public void SetWeight(double weight)
+    {
+        Weight = weight;
+    }
+    public string GetName()
+    {
+        return Name;
+    }
+    public double GetPrice()
+    {
+        return Price;
+    }
+    public Currency GetCost()
+    {
+        return Cost;
+    }
+    public int GetQuantity()
+    {
+        return Quantity;
+    }
+    public string GetProducer()
+    {
+        return Producer;
+    }
+    public double GetWeight()
+    {
+        return Weight;
+    }
+    public double GetPriceInUAH() 
+    {
+        return Cost.GetExRate() * Price;
+    }
+    public double GetTotalPriceInUAH()
+    {
+        return Cost.GetExRate() * Price * Quantity;
+    }
+    public double GetTotalWeight()
+    {
+        return Quantity * Weight;
+    }
+}
+public class Currency
+{
+    protected string Name;
+    protected double ExRate;
+    public void SetName(string name)
+    {
+        Name = name;
+    }
+    public void SetExRate(double exRate)
+    {
+        ExRate = exRate;
+    }
+    public string GetName()
+    {
+        return Name;
+    }
+    public double GetExRate()
+    {
+        return ExRate;
     }
 }
 class Program
@@ -90,13 +213,37 @@ class Program
         finishDate.SetDay(30);
         finishDate.SetHours(15);
         finishDate.SetMinutes(30);
-        
-        Airplane airplane = new Airplane("Kyiv", "Zhytomyr", startDate, finishDate);
+
+        Airplane airplane = new Airplane();
+        airplane.SetStartCity("Kyiv");
+        airplane.SetFinishCity("Zhytomyr");
+        airplane.SetStartDate(startDate);
+        airplane.SetFinishDate(finishDate);
 
         int totalTime = airplane.GetTotalTime();
         bool isArrivingToday = airplane.IsArrivingToday();
 
         Console.WriteLine($"Total travel time: {totalTime} minutes.");
-        Console.WriteLine($"Same start-finish date: {isArrivingToday}.");
+        Console.WriteLine($"Same depart/arrival date: {isArrivingToday}.");
+
+        Currency currency = new Currency();
+        currency.SetName("USD");
+        currency.SetExRate(37.48);
+
+        Product product = new Product();
+        product.SetName("Chocolate");
+        product.SetPrice(3.5);
+        product.SetCost(currency);
+        product.SetQuantity(1000);
+        product.SetProducer("USA Chocolate Factory");
+        product.SetWeight(0.5);
+
+        double priceUAH = product.GetPriceInUAH();
+        double totalPriceUAH = product.GetTotalPriceInUAH();
+        double totalWeight = product.GetTotalWeight();
+
+        Console.WriteLine($"Price in UAH: {Math.Round(priceUAH, 2)}.");
+        Console.WriteLine($"Total price in UAH: {Math.Round(totalPriceUAH, 2)}.");
+        Console.WriteLine($"Total weight: {Math.Round(totalWeight, 2)}.");
     }
 }
