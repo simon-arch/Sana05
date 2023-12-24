@@ -8,6 +8,14 @@ public class MyDate
     protected int Day;
     protected int Hours;
     protected int Minutes;
+    public MyDate()
+    {
+        Year = DateTime.Now.Year;
+        Month = DateTime.Now.Month;
+        Day = DateTime.Now.Day;
+        Hours = DateTime.Now.Hour;
+        Minutes = DateTime.Now.Minute;
+    }
     public void SetYear(int year)
     {
         if (year > 0) 
@@ -61,13 +69,22 @@ public class Airplane
     protected string FinishCity;
     protected MyDate StartDate;
     protected MyDate FinishDate;
+    public Airplane()
+    {
+        StartCity = "Kyiv";
+        FinishCity = "Zhytomyr";
+        StartDate = new MyDate();
+        FinishDate = new MyDate();
+    }
     public void SetStartCity(string startCity)
     {
-        StartCity = startCity;
+        if(startCity.Length > 0)
+            StartCity = startCity;
     }
     public void SetFinishCity(string finishCity)
     {
-        FinishCity = finishCity;
+        if(finishCity.Length > 0)
+            FinishCity = finishCity;
     }
     public void SetStartDate (MyDate startDate)
     {
@@ -114,13 +131,24 @@ public class Product
     protected int Quantity;
     protected string Producer;
     protected double Weight;
+    public Product()
+    {
+        Name = "Chocolate";
+        Price = 3.5;
+        Cost = new Currency();
+        Quantity = 1000;
+        Producer = "USA Chocolate Factory";
+        Weight = 0.5;
+    }
     public void SetName(string name)
     {
-        Name = name;
+        if (name.Length > 0)
+            Name = name;
     }
     public void SetPrice(double price)
     {
-        Price = price;
+        if (price > 0)
+            Price = price;
     }
     public void SetCost(Currency cost)
     {
@@ -128,15 +156,18 @@ public class Product
     }
     public void SetQuantity(int quantity)
     {
-        Quantity = quantity;
+        if (quantity > 0)
+            Quantity = quantity;
     }
     public void SetProducer(string producer) 
-    { 
-        Producer = producer;
+    {
+        if (producer.Length > 0)
+            Producer = producer;
     }
     public void SetWeight(double weight)
     {
-        Weight = weight;
+        if (weight > 0)
+            Weight = weight;
     }
     public string GetName()
     {
@@ -179,13 +210,20 @@ public class Currency
 {
     protected string Name;
     protected double ExRate;
+    public Currency()
+    {
+        Name = "USD";
+        ExRate = 37.48;
+    }
     public void SetName(string name)
     {
-        Name = name;
+        if (name.Length > 0)
+            Name = name;
     }
     public void SetExRate(double exRate)
     {
-        ExRate = exRate;
+        if (exRate > 0)
+            ExRate = exRate;
     }
     public string GetName()
     {
